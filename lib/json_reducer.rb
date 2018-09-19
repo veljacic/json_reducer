@@ -1,5 +1,8 @@
-require "json_reducer/version"
+require 'json_reducer/version'
+require 'json_reducer/mask'
 
 module JsonReducer
-  # Your code goes here...
+  def self.new(*args)
+    Mask.new(*args)
+  end
 end
