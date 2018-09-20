@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "foo": {
+      "type": "object",
+      "properties": {
+        "bar": {"type": "object"}
+      }
+    },
+    "abc": {
+      "type": "object",
+      "properties": {
+        "def": {"type": "string"}
+      }
+    },
+    "dbc": {
+      "type": "object",
+      "properties": {
+        "fed": {"type": "string"}
+      }
+    }
+  }
+}

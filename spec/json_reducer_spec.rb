@@ -40,9 +40,12 @@ RSpec.describe JsonReducer do
         'dbc' => {'type' => 'object'}
       }
     }
-
-    expect(JsonReducer::Mask.new(abc_schema).apply(payload)).to eq('abc' => {'def' => 'DEF'})
-    expect(JsonReducer::Mask.new(dbc_schema).apply(payload)).to eq('dbc' => {'fed' => 'FED'})
+    JsonReducer.register(:schema, abc_schema.to_json, file: false)
+    JsonReducer.register(:schema1, dbc_schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
+    actual1 = JsonReducer.new(:schema1).apply(payload)
+    expect(actual).to eq('abc' => {'def' => 'DEF'})
+    expect(actual1).to eq('dbc' => {'fed' => 'FED'})
   end
 
   it 'returns fieltered schema for array' do
@@ -63,7 +66,43 @@ RSpec.describe JsonReducer do
         }
       }
     }
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.register(:schema, schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
+    expect(actual).to eq(
+      'dbc' => {
+        'fed' => 'FED'
+      },
+      'included' => [
+        {
+          'txt' => 'txt'
+        },
+        {
+          'txt' => 'txt2'
+        }
+      ]
+    )
+  end
+
+  it 'works when you pass a hash' do
+    schema =  {
+      'type' => 'object',
+      'properties' => {
+        'dbc' => {
+          'type' => 'object',
+          'properties' => {
+            'fed' => {'type' => 'string'}
+          }
+        },
+        'included' => {
+          'type' => 'array',
+          'properties' => {
+            'txt' => {'type' => 'string'}
+          }
+        }
+      }
+    }
+    JsonReducer.register(:schema, schema, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
     expect(actual).to eq(
       'dbc' => {
         'fed' => 'FED'
@@ -97,7 +136,8 @@ RSpec.describe JsonReducer do
       }
     }
 
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.register(:schema, schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
 
     expect(actual).to eq(
       'foo' => {
@@ -116,7 +156,8 @@ RSpec.describe JsonReducer do
       }
     }
 
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.register(:schema, schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
 
     expect(actual).to eq(
       'foo' => {
@@ -138,7 +179,8 @@ RSpec.describe JsonReducer do
       }
     }
 
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.register(:schema, schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
 
     expect(actual).to eq(
       'foo' => {
@@ -170,7 +212,8 @@ RSpec.describe JsonReducer do
       }
     }
 
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.register(:schema, schema.to_json, file: false)
+    actual = JsonReducer.new(:schema).apply(payload)
 
     expect(actual).to eq(
       'foo' => {
@@ -186,31 +229,9 @@ RSpec.describe JsonReducer do
   end
 
   it 'works for nexted complex cases' do
-    schema =  {
-      'type' => 'object',
-      'properties' => {
-        'foo' => {
-          'type' => 'object',
-          'properties' => {
-            'bar' => {'type' => 'object'}
-          }
-        },
-        'abc' => {
-          'type' => 'object',
-          'properties' => {
-            'def' => {'type' => 'string'}
-          }
-        },
-        'dbc' => {
-          'type' => 'object',
-          'properties' => {
-            'fed' => {'type' => 'string'}
-          }
-        }
-      }
-    }
-
-    actual = JsonReducer::Mask.new(schema).apply(payload)
+    JsonReducer.base_path("#{Dir.pwd}/spec/support")
+    JsonReducer.register(:schema, 'schema.json')
+    actual = JsonReducer.new(:schema).apply(payload)
 
     expect(actual).to eq(
       'foo' => {
@@ -226,5 +247,13 @@ RSpec.describe JsonReducer do
         'fed' => 'FED'
       }
     )
+  end
+
+  describe '#base_path' do
+    it 'sets the base_path' do
+      path = 'lib/schemas'
+      JsonReducer.base_path(path)
+      expect(JsonReducer::Schemas.instance.base_path).to eq path
+    end
   end
 end
