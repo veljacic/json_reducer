@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Hash reducer'
   spec.description   = 'Reduces hash based on given JSON schema.'
-  spec.homepage      = 'https://github.com/edis-veljacic'
+  spec.homepage      = 'https://github.com/veljacic/json_reducer'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
