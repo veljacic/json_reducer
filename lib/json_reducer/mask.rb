@@ -1,7 +1,7 @@
 module JsonReducer
   class Mask
-    def initialize(schema)
-      @schema = parse_record(schema)
+    def initialize(key)
+      @schema = JsonReducer::Schemas.instance.get(key)
     end
 
     def apply(payload)
@@ -16,7 +16,6 @@ module JsonReducer
     def apply!(payload, schema)
       return if schema.dig('properties').nil?
 
-      # sliced = payload.slice!(*schema['properties'].keys)
       sliced = slice!(payload, schema['properties'].keys)
       handle(schema['properties'], sliced)
     end
