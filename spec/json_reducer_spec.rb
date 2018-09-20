@@ -30,22 +30,22 @@ RSpec.describe JsonReducer do
     abc_schema = {
       'type' => 'object',
       'properties' => {
-        'abc' => {'type' => 'object'}
+        'abc' => { 'type' => 'object' }
       }
     }
 
     dbc_schema = {
       'type' => 'object',
       'properties' => {
-        'dbc' => {'type' => 'object'}
+        'dbc' => { 'type' => 'object' }
       }
     }
     JsonReducer.register(:schema, abc_schema.to_json, file: false)
     JsonReducer.register(:schema1, dbc_schema.to_json, file: false)
     actual = JsonReducer.new(:schema).apply(payload)
     actual1 = JsonReducer.new(:schema1).apply(payload)
-    expect(actual).to eq('abc' => {'def' => 'DEF'})
-    expect(actual1).to eq('dbc' => {'fed' => 'FED'})
+    expect(actual).to eq('abc' => { 'def' => 'DEF' })
+    expect(actual1).to eq('dbc' => { 'fed' => 'FED' })
   end
 
   it 'returns fieltered schema for array' do
@@ -55,13 +55,13 @@ RSpec.describe JsonReducer do
         'dbc' => {
           'type' => 'object',
           'properties' => {
-            'fed' => {'type' => 'string'}
+            'fed' => { 'type' => 'string' }
           }
         },
         'included' => {
           'type' => 'array',
           'properties' => {
-            'txt' => {'type' => 'string'}
+            'txt' => { 'type' => 'string' }
           }
         }
       }
@@ -84,19 +84,19 @@ RSpec.describe JsonReducer do
   end
 
   it 'works when you pass a hash' do
-    schema =  {
+    schema = {
       'type' => 'object',
       'properties' => {
         'dbc' => {
           'type' => 'object',
           'properties' => {
-            'fed' => {'type' => 'string'}
+            'fed' => { 'type' => 'string' }
           }
         },
         'included' => {
           'type' => 'array',
           'properties' => {
-            'txt' => {'type' => 'string'}
+            'txt' => { 'type' => 'string' }
           }
         }
       }
@@ -128,7 +128,7 @@ RSpec.describe JsonReducer do
             'bar' => {
               'type' => 'object',
               'properties' => {
-                'title' => {'type' => 'string'}
+                'title' => { 'type' => 'string' }
               }
             }
           }
@@ -152,7 +152,7 @@ RSpec.describe JsonReducer do
     schema =  {
       'type' => 'object',
       'properties' => {
-        'foo' => {'type' => 'object'}
+        'foo' => { 'type' => 'object' }
       }
     }
 
@@ -174,8 +174,8 @@ RSpec.describe JsonReducer do
     schema =  {
       'type' => 'object',
       'properties' => {
-        'foo' => {'type' => 'object'},
-        'xyz' => {'type' => 'string'}
+        'foo' => { 'type' => 'object' },
+        'xyz' => { 'type' => 'string' }
       }
     }
 
@@ -194,19 +194,19 @@ RSpec.describe JsonReducer do
   end
 
   it 'works for complex cases' do
-    schema =  {
+    schema = {
       'type' => 'object',
       'properties' => {
         'foo' => {
           'type' => 'object',
           'properties' => {
-            'bar' => {'type' => 'object'}
+            'bar' => { 'type' => 'object' }
           }
         },
         'abc' => {
           'type' => 'object',
           'properties' => {
-            'def' => {'type' => 'string'}
+            'def' => { 'type' => 'string' }
           }
         }
       }
